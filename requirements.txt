@@ -1,0 +1,8 @@
+numpy>=1.26
+pandas>=2.2
+matplotlib>=3.8
+seaborn>=0.13
+geopandas>=0.14
+shapely>=2.0
+jupyterlab>=4.0
+scipy>=1.11
