@@ -1,0 +1,3 @@
+,substations,deficit (MW),reinforce-only cost ($M),optimised cost ($M),saving ($M),saving (%)
+Base case (65% base load),9.0,20.196,9.0,5.398879999999999,3.6011200000000008,0.4001244444444445
+Robust case (70% base load),17.0,47.779999999999944,18.9,12.3504,6.549599999999998,0.3465396825396825

@@ -1,0 +1,7 @@
+substation_id,uprates,new_bay,smart_charging,tou_tariff,battery_blocks,cost_musd
+Substation_560,1,0,1,0,0,1.7089599999999998
+Substation_258,1,0,0,0,0,0.9
+Substation_301,1,0,0,0,0,0.9
+Substation_516,0,0,0,1,1,0.39999999999999997
+Substation_470,0,0,0,1,1,0.39999999999999997
+Substation_11_B,0,0,0,1,0,0.05
