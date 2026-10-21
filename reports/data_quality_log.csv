@@ -1,0 +1,8 @@
+id,dataset,issue,evidence,impact,decision
+DQ-01,ev_distribution,Exact duplicate rows,403 of 500 rows (81%); 97 unique,High,Drop exact duplicates before any aggregation
+DQ-02,geospatial,Substation_ID not unique,Substation_11 has 2 rows with different location and capacity (80 / 43 MW),High,Split into _A/_B and allocate EV records by nearest location
+DQ-03,weather,Weather label contradicts temperature,All 'Snowy' records are > 2 °C; 11 are > 25 °C,Medium,Use temperature/precipitation; flag label as low-confidence
+DQ-04,all,Coordinates stored as text tuples,"e.g. '(64.02, -129.53)'",Low,Parse into numeric lat/lon columns
+DQ-05,all,Geographic footprint is unrealistic,"Lat ~18–82°N, lon ~-164 to -62°",Low,Use maps for relative patterns only; note in report
+DQ-06,ev vs geospatial,Unit mismatch: kWh vs MW,Demand is energy per event; capacity is power,High,Convert with an explicit charging-window assumption plus sensitivity test
+DQ-07,ev_distribution,"Short history, small sample",97 events over ~5.5 weeks,Medium,Scenario-based growth instead of time-series forecasting

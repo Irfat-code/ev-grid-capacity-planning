@@ -1,0 +1,31 @@
+column,dtype,description,example
+timestamp,datetime64[us],Date and hour of the charging event,2020-01-03 11:00:00
+date,object,Calendar date of the event,2020-01-03
+hour,int32,Hour of day (0-23),11
+day_of_week,str,Weekday name,Friday
+is_weekend,bool,True for Saturday/Sunday,False
+is_peak_hour,bool,True if hour is in the 17:00-20:59 evening peak,False
+time_of_day,category,Five-band time-of-day category,Morning (6-11)
+geographical_area,str,Urban / Suburban / Rural,Rural
+customer_type,str,Residential / Commercial / Industrial,Residential
+ev_type,str,Electric Car / Scooter / Bike,Electric Scooter
+charger_type,str,Type 1 / Type 2 / DC Fast,Type 2
+charging_habit,str,Daily / Weekly / Occasional,Weekly
+number_of_evs,int64,Count of EVs at the data point,1
+electricity_consumption_kwh,float64,Energy consumed in the event (kWh),597.5545127122359
+kwh_per_ev,float64,Consumption divided by number of EVs (kWh),597.5545127122359
+nominal_charger_kw,float64,ASSUMED charger power rating by type (kW),22.0
+station_lat,float64,Charging station latitude,61.38386846317867
+station_lon,float64,Charging station longitude,-111.34745489202862
+substation_id,str,Serving substation (Substation_11 split into _A/_B),Substation_744
+substation_id_raw,str,Substation ID as delivered in the raw data,Substation_744
+sub_lat,float64,Substation latitude,57.40551481260807
+sub_lon,float64,Substation longitude,-67.12254830691549
+capacity_mw,int64,Transmission line capacity of the substation (MW),34
+station_to_sub_km,float64,Great-circle distance station to substation (km),2491.9503590261497
+temperature_c,float64,Ambient temperature (°C),28.865988910082315
+precipitation_mm,float64,Precipitation (mm),0.3136108570722939
+weather_conditions,str,"Weather label as delivered (low confidence, see DQ-03)",Snowy
+weather_label_reliable,bool,False where label contradicts temperature,False
+temp_band,category,Temperature band,Warm (25-30)
+is_wet,bool,True if precipitation >= 2.5 mm,False
