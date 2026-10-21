@@ -2,27 +2,56 @@
 
 How much electric-vehicle charging can a distribution network take before it needs upgrading, which substations go first, and what's the cheapest way to keep them within limits?
 
-I worked through this for a fictional utility, PowerCharge Utilities, using their EV charging, substation and weather data. The analysis runs across eight notebooks. It starts with a fairly brutal data audit and ends with a costed, prioritised upgrade plan.
+I worked through this for a fictional utility, PowerCharge Utilities, using the EV charging, substation and weather data supplied with a project brief that participants were invited to tackle. The brief asked for exploratory analysis, a capacity assessment, network optimisation, geospatial analysis, data transformation and an executive report. The analysis runs across eight notebooks. It starts with a fairly brutal data audit and ends with a costed, prioritised upgrade plan.
+
+**Skills demonstrated:** data quality auditing, scenario modelling, mixed-integer optimisation, geospatial analysis, executive reporting.
+**Built with:** Python, pandas, NumPy, SciPy, Matplotlib, Seaborn, GeoPandas, Jupyter.
 
 ![One-page summary](reports/executive_summary.png)
 
 ## The short version
 
-- **Nothing is at risk today.** EV charging adds 0.1–1.6% to substation peak load. The busiest substation peaks at 67% of capacity, against an 80% planning limit.
-- **Headroom runs out unevenly.** The first substation (258) hits its limit at about 9× today's EV load. By 20×, nine substations are over.
+> All capacity and cost figures are scenario-based. They depend on assumed base load, charger ratings, simultaneous charging and planning limits, and should be validated against utility and GIS records before any investment decision.
+
+- **No substation exceeds its planning limit under the modelled assumptions.** EV charging adds 0.1–1.6% to substation peak load. The busiest substation peaks at 67% of capacity, against an 80% planning limit.
+- **Headroom runs out unevenly.** The first substation (258) reaches its limit at about 9.4× today's EV load. By 20×, nine substations are over.
 - **The risk comes from fast chargers and session volume, not customer type.** Energy per charging session is statistically the same across every segment I tested. What separates the problem substations is DC fast charging: it makes up 81–93% of connected EV power at the at-risk sites, against 17% everywhere else.
-- **A mix of fixes is cheaper than reinforcing.** Combining transformer uprates with tariffs, smart charging and small batteries keeps every substation compliant for $5.4M, against $9.0M for reinforcement alone. It stays cheaper even if the non-wire measures deliver only half of what's planned.
-- **The answer depends heavily on two inputs we don't have.** Those are existing base load, and which substation each charger is actually connected to. I'd fix those before spending anything beyond the no-regret items.
+- **A mix of fixes is cheaper than reinforcing.** Combining transformer uprates with tariffs, smart charging and small batteries keeps every substation compliant for less than reinforcement alone (see the table below). It stays cheaper even if the non-wire measures deliver only half of what's planned.
+- **The answer depends heavily on two inputs we don't have.** Those are existing base load, and which substation each charger is actually connected to. I'd fix those before spending anything beyond the no-regret items ($4.4M across 6 substations).
+
+| EV growth | Within limit | Above limit | Overloaded |
+|---|---:|---:|---:|
+| Today | 50 | 0 | 0 |
+| 5× | 50 | 0 | 0 |
+| 10× | 49 | 1 | 0 |
+| 20× | 41 | 9 | 0 |
+| 40× | 24 | 21 | 5 |
+
+| Scenario | Reinforcement only | Optimised plan | Saving |
+|---|---:|---:|---:|
+| Base case (65% base load) | $9.0M | $5.4M | $3.6M (40%) |
+| Robust case (70% base load) | $18.9M | $12.4M | $6.5M (35%) |
+
+## Beyond the brief
+
+The brief listed Python, NumPy, pandas, Matplotlib, Seaborn, GeoPandas and Jupyter. I went further in four places:
+
+- **Data audit before analysis.** The data had defects that would have changed the conclusions (403 duplicate rows, a duplicated substation ID, contradictory weather labels, impossible charger-to-substation links), so I logged and resolved each one before modelling.
+- **Stress-tested assumptions.** Base load, charger ratings, simultaneity and the planning limit are varied across 45 combinations to see which answers survive.
+- **A real optimiser.** The brief asked for "optimization algorithms", so I used a mixed-integer program (`scipy.optimize.milp`) to choose between wire and non-wire fixes site by site, and produced a budget frontier.
+- **Challenging the data's own geography.** Mapping the data exposed the charger links as physically implausible, so I ran a what-if on reallocating them (notebook 07).
 
 ## Data
 
-Three CSVs came with the case study:
+Three CSVs came with the case study, all in `data/raw/`:
 
 | File | What's in it | Rows |
 |---|---|---|
 | `ev_distribution_dataset.csv` | Charging events: time, area, customer type, kWh, station location and charger type, EV type, charging habit, number of EVs, substation | 500 (97 after dedup) |
 | `geospatial_dataset.csv` | Substations: location and capacity (MW) | 50 |
 | `weather_dataset.csv` | Temperature, precipitation and conditions for each event | 97 |
+
+The brief labels the capacity column "Transmission Line Capacity (MW)". I treat it as each substation's capacity, since there is one value per substation and no line-level data.
 
 I found several problems in the data, and they shaped everything downstream. They're all logged in [`reports/data_quality_log.csv`](reports/data_quality_log.csv):
 
@@ -71,6 +100,7 @@ A few choices worth explaining:
 ## Limitations
 
 - 97 charging events over 38 days is enough to describe patterns, but not to forecast growth.
+- Base load is assumed, not measured, so absolute utilisation figures are modelled estimates.
 - The coordinates span most of North America, so the maps show relative patterns rather than a real service area.
 - Unit costs are indicative. They're in one table in notebook 06, so real figures can be dropped in and the plan re-run.
 - Only thermal capacity is modelled. Voltage drop on long feeders would need a power-flow model (pandapower would be my next step).
@@ -78,8 +108,12 @@ A few choices worth explaining:
 ## Running it
 
 ```bash
-conda install -c conda-forge geopandas    # the rest ships with Anaconda
-# or: pip install -r requirements.txt
+git clone https://github.com/Irfat-code/ev-grid-capacity-planning.git
+cd ev-grid-capacity-planning
+
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt  # or: conda install -c conda-forge geopandas
 
 jupyter lab
 ```
@@ -95,8 +129,11 @@ reports/           figures, data-quality log, bottleneck register, upgrade plan,
 src/ev_utils.py    shared helpers, including the capacity model
 ```
 
-Python, pandas, NumPy, SciPy, Matplotlib, Seaborn, GeoPandas, Jupyter.
+## Licence
+
+[MIT](LICENSE)
 
 ---
 
-Anna Tafri
+**Anna Tafri**, Data Analytics Engineer
+Portfolio: [tafri-portfolio.netlify.app](https://tafri-portfolio.netlify.app) · GitHub: [Irfat-code](https://github.com/Irfat-code)
