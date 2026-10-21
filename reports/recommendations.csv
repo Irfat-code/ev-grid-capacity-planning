@@ -1,0 +1,7 @@
+#,recommendation,detail,cost,owner,timing
+1,Run a data-validation sprint before releasing capex,"Reconcile station-to-substation connectivity with the GIS / asset register and pull 12 months of SCADA peak load for Tier 1-2 substations, then re-run notebooks 04-07",Low (internal data and GIS team),Data & GIS,0-3 months
+2,Approve the no-regret package in principle,"Uprates and targeted non-wire measures at 6 substations (S560, S258, S301, S516, S470, S11_B), required under every base-load assumption. Release once rec. #1 confirms connectivity at these sites",$4.4M,Network Planning,"Approve now, release after rec. #1"
+3,Pilot time-of-use tariffs and smart charging,Start where non-wire options are the planned fix (10 substations) and measure real peak reduction against the 10% / 25% planning assumptions,Included in plan,Customer & Pricing,3-9 months
+4,Introduce a DC fast-charger connection review,"Any new DC fast-charger connection at a Tier 1-2 substation triggers a capacity check, with managed charging or a battery buffer as a connection condition where headroom is thin",Policy (no capex),Connections,0-6 months
+5,"Fund the remaining plan on triggers, not dates",Release each upgrade when measured EV peak reaches its trigger multiple. Phase 1 covers 3 substations ($4.8M); full robust plan $12.4M,Up to $8.0M beyond no-regret,Finance & Planning,Ongoing
+6,Build an EV capacity monitoring dashboard,"Track EV peak per substation against its breaking multiple and trigger, refreshed monthly from metering data",Low,Analytics,3-6 months
